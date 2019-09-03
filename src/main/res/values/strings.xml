@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Sea Master</string>
+    <string name="lbl_2">start play img</string>
+    <string name="lbl_in_game">Play On!</string>
+    <string name="lbl_end_game">End Game!</string>
+    <string name="lbl_score_and_time">Score: 0  Time: 30</string>
+    <string name="Player_Name">Player Name:</string>
+    <string name="Player_Name_2">%&amp;s</string>
+    <string name="enter_name">Enter Name...</string>
+    <string name="todo">TODO</string>
+</resources>

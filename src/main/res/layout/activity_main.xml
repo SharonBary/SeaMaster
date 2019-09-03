@@ -57,6 +57,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/Gold"
                     android:textSize="20sp"
+                    android:hint="true"
                     android:autofillHints="" />
 
 

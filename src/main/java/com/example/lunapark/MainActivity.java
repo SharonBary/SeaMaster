@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity  {
     //Variables for views
     private TextView  lblName_1, lblNameStatus;
     private ImageView imgHart;
+    private EditText edtName;
     private ImageButton btmPlay;
 
     @Override
@@ -32,28 +34,13 @@ public class MainActivity extends AppCompatActivity  {
 
         lblName_1 = (TextView)findViewById(R.id.etxtPlayerName);
 
+
         btmPlay = findViewById(R.id.play_btn);
 
         btmPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 arrangeGame();
-
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-     //                           startGame();
-                            }
-                        });
-                    }
-                };
-               // timer = new Timer();
-               // timer.schedule(task, 1000);
-
             }
         });
     }

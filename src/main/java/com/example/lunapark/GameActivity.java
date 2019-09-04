@@ -7,7 +7,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Date;
+import java.util.Random;
 import java.util.Timer;
+import java.util.TimerTask;
+
+import static android.app.PendingIntent.getActivity;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -25,6 +30,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int score;
     private int time;
     private int lives;
+    private int randomInt;
     private String playerName;
 
 
@@ -42,6 +48,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         this.lives = START_LIVES;
 
 
+
         allFish = new ImageButton[9];
         allFish[0] = findViewById(R.id.fish_1);
         allFish[1] = findViewById(R.id.fish_2);
@@ -53,53 +60,99 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         allFish[7] = findViewById(R.id.fish_8);
         allFish[8] = findViewById(R.id.fish_9);
 
+        for( i = 0 ; i < 9 ; i++)
+           allFish[i].setOnClickListener((View.OnClickListener) this);
 
-     //   for( i = 0 ; i < 9 ; i++)
-        //    allFish[i].setOnClickListener((View.OnClickListener) this);
-
-       // this.lblName_2.setText();
+        //this.lblName_2.setText();
         lblNameDetails.setText("Score: "+score+"  Time: "+time);
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startGame();
+                    }
+                });
+            }
+        };
+        timer = new Timer();
+        timer.schedule(task, 1000);
     }
 
-    private void checkHit(int i){
-
+    private void checkHit(int randomInt){
+        if(allFish[randomInt].getVisibility() == View.VISIBLE ) this.score++;
 
     }
 
     private void startGame() {
 
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        randomFish();
+                        updateDetail();
+                        checkEndGame();
+                    }
+                });
+            }
+        };
+        timer.scheduleAtFixedRate(task, new Date(), 1000);
     }
+
+    private void randomFish(){
+        Random randomGenerator = new Random();
+        this.randomInt = randomGenerator.nextInt(9);
+        for(int i = 0 ; i < allFish.length ; i++) allFish[i].setVisibility(View.INVISIBLE);
+        allFish[this.randomInt].setVisibility(View.VISIBLE);
+    }
+
+    private void updateDetail() { //Need to Insert Score!
+        this.time--;
+        lblNameDetails.setText("Score: "+score+"  Time: "+time);
+    }
+
+    private void checkEndGame(){
+        if(this.time == 0){}
+        else if (this.lives == 0){}
+        else
+    }
+
 
     @Override
     public void onClick(View view) {
 
         switch(view.getId()){
             case R.id.fish_1:
-                checkHit(0);
+                checkHit(this.randomInt);
                 break;
             case R.id.fish_2:
-                checkHit(1);
+                checkHit(this.randomInt);
                 break;
             case R.id.fish_3:
-                checkHit(2);
+                checkHit(this.randomInt);
                 break;
             case R.id.fish_4:
-                checkHit(3);
+                checkHit(this.randomInt);
                 break;
             case R.id.fish_5:
-                checkHit(4);
+                checkHit(this.randomInt);
                 break;
             case R.id.fish_6:
-                checkHit(5);
+                checkHit(this.randomInt);
                 break;
             case R.id.fish_7:
-                checkHit(6);
+                checkHit(this.randomInt);
                 break;
             case R.id.fish_8:
-                checkHit(7);
+                checkHit(this.randomInt);
                 break;
             case R.id.fish_9:
-                checkHit(8);
+                checkHit(this.randomInt);
                 break;
         }
 

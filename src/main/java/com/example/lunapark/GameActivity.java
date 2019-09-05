@@ -2,6 +2,7 @@ package com.example.lunapark;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -20,10 +21,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     final int START_TIME = 30;
     final int START_LIVES = 3;
     final int START_SCORE = 0;
-    final int WINNING_SCORE=30;
+    final int WINNING_SCORE = 30;
+    final int END_GAME_POINTS = 1;
+    final int END_GAME_TIME= 2;
+    final int END_GAME_LIVES= 3 ;
 
-    private TextView lblName_2;
+    final String END_GAME_SCORE_LBL = "Game Finish! Good Game!";
+    final String END_GAME_TIME_LBL = "Time Out! Game Over";
+    final String END_GAME_LIVES_LBL = "Game Over! Try Again!";
+
+    private TextView lblName_1,lblName_2;
     private ImageButton[] allFish;
+    private TextView[] EndgameAllIndicators;
     private TextView lblNameDetails;
 
     private Timer timer;
@@ -39,6 +48,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        lblName_1 = (TextView)findViewById(R.id.Game_On);
         lblName_2 = (TextView)findViewById(R.id.lblPlayerName_2);
         lblNameDetails = findViewById(R.id.lbl_score_and_time);
 
@@ -47,18 +57,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         this.time = START_TIME;
         this.lives = START_LIVES;
 
-
-
         allFish = new ImageButton[9];
-        allFish[0] = findViewById(R.id.fish_1);
-        allFish[1] = findViewById(R.id.fish_2);
-        allFish[2] = findViewById(R.id.fish_3);
-        allFish[3] = findViewById(R.id.fish_4);
-        allFish[4] = findViewById(R.id.fish_5);
-        allFish[5] = findViewById(R.id.fish_6);
-        allFish[6] = findViewById(R.id.fish_7);
-        allFish[7] = findViewById(R.id.fish_8);
-        allFish[8] = findViewById(R.id.fish_9);
+        visableAllFish();
 
         for( i = 0 ; i < 9 ; i++)
            allFish[i].setOnClickListener((View.OnClickListener) this);
@@ -79,6 +79,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         };
         timer = new Timer();
         timer.schedule(task, 1000);
+    }
+
+    private void visableAllFish(){
+        allFish[0] = findViewById(R.id.fish_1);
+        allFish[1] = findViewById(R.id.fish_2);
+        allFish[2] = findViewById(R.id.fish_3);
+        allFish[3] = findViewById(R.id.fish_4);
+        allFish[4] = findViewById(R.id.fish_5);
+        allFish[5] = findViewById(R.id.fish_6);
+        allFish[6] = findViewById(R.id.fish_7);
+        allFish[7] = findViewById(R.id.fish_8);
+        allFish[8] = findViewById(R.id.fish_9);
     }
 
     private void checkHit(int randomInt){
@@ -117,11 +129,42 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void checkEndGame(){
-        if(this.time == 0){}
-        else if (this.lives == 0){}
-        else
+        if(this.time <= 0)  {
+            this.lblName_1.setText(END_GAME_TIME_LBL);
+            endGame(END_GAME_TIME);
+        }
+        else if (this.lives <= 0) {
+            this.lblName_1.setText(END_GAME_LIVES_LBL);
+            endGame(END_GAME_LIVES);
+        }
+        else if(this.score >= 30) {
+            this.lblName_1.setText(END_GAME_SCORE_LBL);
+            endGame(END_GAME_POINTS);
+        }
     }
 
+    private void endGame(int EndGameIndicator){
+        visableAllFish();
+        lblNameDetails.setVisibility(View.INVISIBLE);
+        lblName_2.setText("Score: "+score);
+        timer.cancel();
+
+/*        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                    }
+                });
+            }
+        };
+        timer = new Timer();
+        timer.schedule(task, 3000);
+        timer.scheduleAtFixedRate(task, new Date(), 1000);*/
+        startActivity(new Intent(this, MainActivity.class));
+
+    }
 
     @Override
     public void onClick(View view) {

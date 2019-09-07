@@ -18,7 +18,7 @@ import static android.app.PendingIntent.getActivity;
 public class GameActivity extends AppCompatActivity implements View.OnClickListener{
 
     //Constants (Game Settings)
-    final int START_TIME = 30;
+    final int START_TIME = 3;
     final int START_LIVES = 3;
     final int START_SCORE = 0;
     final int WINNING_SCORE = 30;
@@ -31,15 +31,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     final String END_GAME_LIVES_LBL = "Game Over! Try Again!";
 
     private TextView lblName_1,lblName_2;
+    private ImageButton btmEndGame;
     private ImageButton[] allFish;
     private TextView[] EndgameAllIndicators;
     private TextView lblNameDetails;
 
     private Timer timer;
-    private int score;
+    private int score, correntInt;;
     private int time;
     private int lives;
     private int randomInt;
+    private boolean isHit;
     private String playerName;
 
 
@@ -53,9 +55,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         lblNameDetails = findViewById(R.id.lbl_score_and_time);
 
         int i;
+        isHit = false;
         this.score = START_SCORE;
         this.time = START_TIME;
         this.lives = START_LIVES;
+        this.correntInt = 0;
 
         allFish = new ImageButton[9];
         visableAllFish();
@@ -94,8 +98,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void checkHit(int randomInt){
-        if(allFish[randomInt].getVisibility() == View.VISIBLE ) this.score++;
-
+        if(allFish[randomInt].getVisibility() == View.VISIBLE  && this.isHit == false) {
+            this.score++;
+            this.isHit = true;
+        }
     }
 
     private void startGame() {
@@ -103,11 +109,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         randomFish();
                         updateDetail();
+                        isHit = false;
                         checkEndGame();
                     }
                 });
@@ -119,6 +127,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void randomFish(){
         Random randomGenerator = new Random();
         this.randomInt = randomGenerator.nextInt(9);
+
+        if(correntInt == randomInt)
+            this.randomInt = randomGenerator.nextInt(9);
+
+
         for(int i = 0 ; i < allFish.length ; i++) allFish[i].setVisibility(View.INVISIBLE);
         allFish[this.randomInt].setVisibility(View.VISIBLE);
     }
@@ -149,19 +162,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         lblName_2.setText("Score: "+score);
         timer.cancel();
 
-/*        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                    }
-                });
-            }
-        };
-        timer = new Timer();
-        timer.schedule(task, 3000);
-        timer.scheduleAtFixedRate(task, new Date(), 1000);*/
         startActivity(new Intent(this, MainActivity.class));
 
     }
